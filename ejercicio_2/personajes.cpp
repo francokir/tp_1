@@ -2,90 +2,125 @@
 #include <iostream>
 using namespace std;
 
-// Constructores base
+
+void Personaje::agregarArma(shared_ptr<Arma> arma) {
+    armas.push_back(arma);
+}
+
+const vector<shared_ptr<Arma>>& Personaje::obtenerArmas() {
+    return armas;
+};
+
 Mago::Mago(string nombre, int nivel, int energia, string afinidad, int poderMagico)
     : nombre(nombre), nivel(nivel), energia(energia), afinidad(afinidad), poderMagico(poderMagico) {}
 
-Guerrero::Guerrero(string nombre, int nivel, int fuerza, int resistencia, string arma)
-    : nombre(nombre), nivel(nivel), fuerza(fuerza), resistencia(resistencia), arma(arma) {}
+void Mago::atacar() {
+    cout << nombre << " lanza un hechizo con poder " << poderMagico <<"."<< endl;
+    energia -= 10;
+}
 
-// Hechicero
+void Mago::defender() {
+    cout << nombre << " Se defiende con magia del ataque enemigo." << endl;
+    energia -= 5;
+}
+
+void Mago::recibirDano(int cantidad) {
+    cout << nombre << " recibe " << cantidad << " puntos de daño." << endl;
+    energia -= cantidad / 2;
+}
+
+void Mago::mostrarEstado() {
+    cout << "Mago: " << nombre << " | Nivel: " << nivel << " | Energia: " << energia
+         << " | Afinidad: " << afinidad << " | Poder Mágico: " << poderMagico << endl;
+}
+
+
+Guerrero::Guerrero(string nombre, int nivel, int fuerza, int resistencia, int velocidad)
+    : nombre(nombre), nivel(nivel), fuerza(fuerza), resistencia(resistencia), velocidad(velocidad) {}
+
+void Guerrero::atacar() {
+    cout <<"El guerrero "<< nombre << " ataca con fuerza " << fuerza << "." << endl;
+}
+
+void Guerrero::defender() {
+    cout <<"El guerrero "<< nombre << " se cubre con su armadura. Su resistencia es: " << resistencia << endl;
+}
+
+void Guerrero::recibirDano(int cantidad) {
+    int danoReducido = cantidad - resistencia;
+    if (danoReducido < 0) danoReducido = 0;
+    cout <<"El guerrero "<< nombre << " recibe " << danoReducido << " puntos de daño físico." << endl;
+}
+
+void Guerrero::mostrarEstado() {
+    cout << "Guerrero: " << nombre << " | Nivel: " << nivel << " | Fuerza: " << fuerza
+         << " | Resistencia: " << resistencia << " | Velocidad: " << velocidad << endl;
+}
+
 Hechicero::Hechicero(string nombre, int nivel, int energia, string afinidad, int poderMagico)
     : Mago(nombre, nivel, energia, afinidad, poderMagico) {}
 
-void Hechicero::atacar() { cout << nombre << " lanza un hechizo poderoso.\n"; }
-void Hechicero::defender() { cout << nombre << " se protege con un escudo mágico.\n"; }
-void Hechicero::recibirDano(int cantidad) { energia -= cantidad / 2; }
-void Hechicero::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Energía: " << energia << endl; }
+void Hechicero::enjaular() {
+    cout <<"El hechicero "<< nombre << " enjaula al enemigo en una prision temporal dejandolo vulnerable para atacarlo." << endl;
+}
 
-// Conjurador
 Conjurador::Conjurador(string nombre, int nivel, int energia, string afinidad, int poderMagico)
     : Mago(nombre, nivel, energia, afinidad, poderMagico) {}
 
-void Conjurador::atacar() { cout << nombre << " invoca criaturas mágicas.\n"; }
-void Conjurador::defender() { cout << nombre << " crea un muro de energía.\n"; }
-void Conjurador::recibirDano(int cantidad) { energia -= cantidad / 3; }
-void Conjurador::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Energía: " << energia << endl; }
+void Conjurador::invocar_criaturas() {
+    cout <<"El conjurador "<< nombre << " invoca criaturas de fuego que atacan al enemigo." << endl;
+}
 
-// Brujo
 Brujo::Brujo(string nombre, int nivel, int energia, string afinidad, int poderMagico)
     : Mago(nombre, nivel, energia, afinidad, poderMagico) {}
 
-void Brujo::atacar() { cout << nombre << " usa magia oscura.\n"; }
-void Brujo::defender() { cout << nombre << " esquiva con agilidad.\n"; }
-void Brujo::recibirDano(int cantidad) { energia -= cantidad; }
-void Brujo::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Energía: " << energia << endl; }
+void Brujo::manipular_sombras() {
+    cout <<"El Brujo "<< nombre << " manipula las sombras confundiendo al enemigo." << endl;
+}
 
-// Nigromante
 Nigromante::Nigromante(string nombre, int nivel, int energia, string afinidad, int poderMagico)
     : Mago(nombre, nivel, energia, afinidad, poderMagico) {}
 
-void Nigromante::atacar() { cout << nombre << " levanta a los muertos.\n"; }
-void Nigromante::defender() { cout << nombre << " se cubre con un aura oscura.\n"; }
-void Nigromante::recibirDano(int cantidad) { energia -= cantidad / 4; }
-void Nigromante::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Energía: " << energia << endl; }
+void Nigromante::manipular_cadaveres() {
+    cout <<"El nigromante "<< nombre << " revive cadaveres que atacan al enemigo." << endl;
+}
 
-// Barbaro
-Barbaro::Barbaro(string nombre, int nivel, int fuerza, int resistencia, string arma)
-    : Guerrero(nombre, nivel, fuerza, resistencia, arma) {}
 
-void Barbaro::atacar() { cout << nombre << " ataca con su hacha.\n"; }
-void Barbaro::defender() { cout << nombre << " se cubre con su fuerza bruta.\n"; }
-void Barbaro::recibirDano(int cantidad) { resistencia -= cantidad / 2; }
-void Barbaro::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Resistencia: " << resistencia << endl; }
+Barbaro::Barbaro(string nombre, int nivel, int fuerza, int resistencia, int velocidad)
+    : Guerrero(nombre, nivel, fuerza, resistencia, velocidad) {}
 
-// Paladin
-Paladin::Paladin(string nombre, int nivel, int fuerza, int resistencia, string arma)
-    : Guerrero(nombre, nivel, fuerza, resistencia, arma) {}
+void Barbaro::atacar_enfurecido() {
+    Barbaro::fuerza+=10;
+    Barbaro::nivel+=1;
+    cout <<"El barbaro "<< nombre << " entra en un estado de furia y destroza al enemigo." << endl;
+}
 
-void Paladin::atacar() { cout << nombre << " golpea con su maza sagrada.\n"; }
-void Paladin::defender() { cout << nombre << " invoca un escudo divino.\n"; }
-void Paladin::recibirDano(int cantidad) { resistencia -= cantidad / 3; }
-void Paladin::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Resistencia: " << resistencia << endl; }
+Paladin::Paladin(string nombre, int nivel, int fuerza, int resistencia, int velocidad)
+    : Guerrero(nombre, nivel, fuerza, resistencia, velocidad) {}
 
-// Caballero
-Caballero::Caballero(string nombre, int nivel, int fuerza, int resistencia, string arma)
-    : Guerrero(nombre, nivel, fuerza, resistencia, arma) {}
+void Paladin::proteger_aliados() {
+    Paladin::nivel--;
+    cout <<"El paladin "<< nombre << " protege a sus aliados del ataque enemigo recibiendo todo el." << endl;
+}
 
-void Caballero::atacar() { cout << nombre << " embiste con su lanza.\n"; }
-void Caballero::defender() { cout << nombre << " levanta su escudo.\n"; }
-void Caballero::recibirDano(int cantidad) { resistencia -= cantidad / 4; }
-void Caballero::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Resistencia: " << resistencia << endl; }
+Caballero::Caballero(string nombre, int nivel, int fuerza, int resistencia, int velocidad)
+    : Guerrero(nombre, nivel, fuerza, resistencia, velocidad) {}
 
-// Mercenario
-Mercenario::Mercenario(string nombre, int nivel, int fuerza, int resistencia, string arma)
-    : Guerrero(nombre, nivel, fuerza, resistencia, arma) {}
+void Caballero::ataque_a_caballo() {
+    Caballero::fuerza+=10;
+    cout <<"El caballero "<< nombre << " monta a un caballo y carga contra el enemigo a mucha velocidad." << endl;
+}
 
-void Mercenario::atacar() { cout << nombre << " ataca por oro.\n"; }
-void Mercenario::defender() { cout << nombre << " esquiva con rapidez.\n"; }
-void Mercenario::recibirDano(int cantidad) { resistencia -= cantidad; }
-void Mercenario::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Resistencia: " << resistencia << endl; }
+Mercenario::Mercenario(string nombre, int nivel, int fuerza, int resistencia, int velocidad)
+    : Guerrero(nombre, nivel, fuerza, resistencia, velocidad) {}
 
-// Gladiador
-Gladiador::Gladiador(string nombre, int nivel, int fuerza, int resistencia, string arma)
-    : Guerrero(nombre, nivel, fuerza, resistencia, arma) {}
+void Mercenario::lanzar_humo() {
+    cout <<"El mercenario "<< nombre << " Lanza un humo que imposibilita al enemigo localizarlo y asi lo ataca por las espaldas." << endl;
+}
 
-void Gladiador::atacar() { cout << nombre << " lucha por la gloria.\n"; }
-void Gladiador::defender() { cout << nombre << " bloquea con su escudo.\n"; }
-void Gladiador::recibirDano(int cantidad) { resistencia -= cantidad / 2; }
-void Gladiador::mostrarEstado() { cout << nombre << " - Nivel: " << nivel << " - Resistencia: " << resistencia << endl; }
+Gladiador::Gladiador(string nombre, int nivel, int fuerza, int resistencia, int velocidad)
+    : Guerrero(nombre, nivel, fuerza, resistencia, velocidad) {}
+
+void Gladiador::revolear_escudo() {
+    cout <<"El gladiador "<< nombre << " revolea su escudo a maxima potencia hacia el enemigo." << endl;
+}
