@@ -7,7 +7,6 @@ class Arma {
     public:
         virtual ~Arma() = default;
         virtual string obtenerNombre() const = 0;
-        virtual int obtenerPoder() const = 0;
         virtual int obtenerdano() const = 0;
         virtual void usar() = 0;
         virtual string obtenerDescripcion() const = 0;
@@ -24,7 +23,7 @@ class ItemMagico : public Arma {
     public: 
         ItemMagico(string nombre, int puntos_magia, int tipo_rareza, string elemento, string efecto);
         string obtenerNombre() const override;
-        int obtenerPoder() const override;
+        int obtenerdano() const override;
         void usar() override;
         string obtenerDescripcion() const override;
         void mejorar() override;

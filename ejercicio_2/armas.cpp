@@ -9,7 +9,7 @@ string ItemMagico::obtenerNombre() const {
     return nombre;
 }
 
-int ItemMagico::obtenerPoder() const {
+int ItemMagico::obtenerdano() const {
     return puntos_magia * multiplicador_por_rareza;
 }
 
@@ -24,7 +24,7 @@ string ItemMagico::obtenerDescripcion() const {
 void ItemMagico::mejorar() {
     multiplicador_por_rareza++;
     puntos_magia += 10;
-    cout << nombre << " ha sido mejorado. Poder actual: " << obtenerPoder() << endl;
+    cout << nombre << " ha sido mejorado. Poder actual: " << obtenerdano() << endl;
 }
 
 

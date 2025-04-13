@@ -6,37 +6,38 @@
 using namespace std;
 
 class Personaje {
-protected:
-    vector<shared_ptr<Arma>> armas;
 public:
     virtual void atacar() = 0;
     virtual void defender() = 0;
     virtual void recibirDano(int cantidad) = 0;
     virtual void mostrarEstado() = 0;
     virtual string obtenerNombre() = 0;
-    virtual ~Personaje() = default;
-
-    void agregarArma(shared_ptr<Arma>);
-
-    const vector<shared_ptr<Arma>>& obtenerArmas();
+    virtual int obtenervida() = 0;
+    virtual int obtenernivel() = 0;
+    virtual void agregarArma(shared_ptr<Arma>) = 0;
+    virtual const vector<shared_ptr<Arma>>& obtenerArmas() = 0;
 };
 
 class Mago : public Personaje {
 protected:
     string nombre;
     int nivel;
-    int energia;
+    int vida;
     string afinidad;
     int poderMagico;
-
+    vector<shared_ptr<Arma>> armas;
 public:
-    Mago(string nombre, int nivel, int energia, string afinidad, int poderMagico);
+    Mago(string nombre, int nivel, int vida, string afinidad, int poderMagico);
 
-    void atacar() override = 0;
-    void defender() override = 0;
-    void recibirDano(int cantidad) override = 0;
-    void mostrarEstado() override = 0;
-    string obtenerNombre() override { return nombre; }
+    void atacar();
+    void defender();
+    void recibirDano(int cantidad);
+    void mostrarEstado();
+    string obtenerNombre();
+    int obtenervida();
+    int obtenernivel();
+    void agregarArma(shared_ptr<Arma>);
+    const vector<shared_ptr<Arma>>& obtenerArmas();
 };
 
 class Guerrero : public Personaje {
@@ -44,73 +45,77 @@ protected:
     string nombre;
     int nivel;
     int fuerza;
-    int resistencia;
+    int vida;
     int velocidad;
-
+    vector<shared_ptr<Arma>> armas;
 public:
-    Guerrero(string nombre, int nivel, int fuerza, int resistencia, int velocidad);
+    Guerrero(string nombre, int nivel, int fuerza, int vida, int velocidad);
 
-    void atacar() override = 0;
-    void defender() override = 0;
-    void recibirDano(int cantidad) override = 0;
-    void mostrarEstado() override = 0;
-    string obtenerNombre() override { return nombre; }
+    void atacar();
+    void defender();
+    void recibirDano(int cantidad);
+    void mostrarEstado();
+    string obtenerNombre();
+    int obtenervida();
+    int obtenernivel();
+    void agregarArma(shared_ptr<Arma>);
+    const vector<shared_ptr<Arma>>& obtenerArmas();
 };
 
 
 class Hechicero : public Mago {
 public:
-    Hechicero(string nombre, int nivel, int energia, string afinidad, int poderMagico);
+    Hechicero(string nombre, int nivel, int vida, string afinidad, int poderMagico);
     void enjaular();
 
 };
 
 class Conjurador : public Mago {
 public:
-    Conjurador(string nombre, int nivel, int energia, string afinidad, int poderMagico);
+    Conjurador(string nombre, int nivel, int vida, string afinidad, int poderMagico);
     void invocar_criaturas();
 };
 
 class Brujo : public Mago {
 public:
-    Brujo(string nombre, int nivel, int energia, string afinidad, int poderMagico);
+    Brujo(string nombre, int nivel, int vida, string afinidad, int poderMagico);
     void manipular_sombras();
 
 };
 
 class Nigromante : public Mago {
 public:
-    Nigromante(string nombre, int nivel, int energia, string afinidad, int poderMagico);
+    Nigromante(string nombre, int nivel, int vida, string afinidad, int poderMagico);
     void manipular_cadaveres();
 };
 
 class Barbaro : public Guerrero {
 public:
-    Barbaro(string nombre, int nivel, int fuerza, int resistencia, int velocidad);
+    Barbaro(string nombre, int nivel, int fuerza, int vida, int velocidad);
     void atacar_enfurecido();
 };
 
 class Paladin : public Guerrero {
 public:
-    Paladin(string nombre, int nivel, int fuerza, int resistencia, int velocidad);
+    Paladin(string nombre, int nivel, int fuerza, int vida, int velocidad);
     void proteger_aliados();
 };
 
 class Caballero : public Guerrero {
 public:
-    Caballero(string nombre, int nivel, int fuerza, int resistencia, int velocidad);
+    Caballero(string nombre, int nivel, int fuerza, int vida, int velocidad);
     void ataque_a_caballo();
 };
 
 class Mercenario : public Guerrero {
 public:
-    Mercenario(string nombre, int nivel, int fuerza, int resistencia, int velocidad);
+    Mercenario(string nombre, int nivel, int fuerza, int vida, int velocidad);
     void lanzar_humo();
 };
 
 class Gladiador : public Guerrero {
 public:
-    Gladiador(string nombre, int nivel, int fuerza, int resistencia, int velocidad);
+    Gladiador(string nombre, int nivel, int fuerza, int vida, int velocidad);
     void revolear_escudo();
 };
 
