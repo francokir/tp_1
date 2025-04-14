@@ -11,11 +11,11 @@ class PersonajeFactory {
 public:
     static void inicializarRandom();
     static int numeroAleatorio(int min, int max);
-    static shared_ptr<Arma> crearArmaAleatoria();
-    static shared_ptr<Arma> crearArma(const string&);
-    static shared_ptr<Mago> crearMago();
-    static shared_ptr<Mago> crearMago(const string&); 
-    static shared_ptr<Guerrero> crearGuerrero();
-    static shared_ptr<Guerrero> crearGuerrero(const string&);
-    static vector<shared_ptr<Personaje>> crearPersonajesArmados();
+    static unique_ptr<Arma> crearArmaAleatoria();
+    static unique_ptr<Arma> crearArma(const string&);
+    static unique_ptr<Mago> crearMago();
+    static unique_ptr<Mago> crearMago(const string&); 
+    static unique_ptr<Guerrero> crearGuerrero();
+    static unique_ptr<Guerrero> crearGuerrero(const string&);
+    static vector<unique_ptr<Personaje>> crearPersonajesArmados();
 };

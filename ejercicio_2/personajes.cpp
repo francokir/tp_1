@@ -3,11 +3,11 @@
 using namespace std;
 
 
-void Mago::agregarArma(shared_ptr<Arma> arma) {
-    armas.push_back(arma);
+void Mago::agregarArma(unique_ptr<Arma> arma) {
+    armas.push_back(move(arma));
 }
 
-const vector<shared_ptr<Arma>>& Mago::obtenerArmas() {
+const vector<unique_ptr<Arma>>& Mago::obtenerArmas() {
     return armas;
 };
 
@@ -49,11 +49,11 @@ string Mago::obtenerNombre(){
 Guerrero::Guerrero(string nombre, int nivel, int fuerza, int vida, int velocidad)
     : nombre(nombre), nivel(nivel), fuerza(fuerza), vida(vida), velocidad(velocidad) {}
 
-    void Guerrero::agregarArma(shared_ptr<Arma> arma) {
-        armas.push_back(arma);
+    void Guerrero::agregarArma(unique_ptr<Arma> arma) {
+        armas.push_back(move(arma));
     }
     
-    const vector<shared_ptr<Arma>>& Guerrero::obtenerArmas() {
+    const vector<unique_ptr<Arma>>& Guerrero::obtenerArmas() {
         return armas;
     };
     

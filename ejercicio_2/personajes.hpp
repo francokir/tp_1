@@ -14,8 +14,8 @@ public:
     virtual string obtenerNombre() = 0;
     virtual int obtenervida() = 0;
     virtual int obtenernivel() = 0;
-    virtual void agregarArma(shared_ptr<Arma>) = 0;
-    virtual const vector<shared_ptr<Arma>>& obtenerArmas() = 0;
+    virtual void agregarArma(unique_ptr<Arma>) = 0;
+    virtual const vector<unique_ptr<Arma>>& obtenerArmas() = 0;
 };
 
 class Mago : public Personaje {
@@ -25,7 +25,7 @@ protected:
     int vida;
     string afinidad;
     int poderMagico;
-    vector<shared_ptr<Arma>> armas;
+    vector<unique_ptr<Arma>> armas;
 public:
     Mago(string nombre, int nivel, int vida, string afinidad, int poderMagico);
 
@@ -36,8 +36,8 @@ public:
     string obtenerNombre();
     int obtenervida();
     int obtenernivel();
-    void agregarArma(shared_ptr<Arma>);
-    const vector<shared_ptr<Arma>>& obtenerArmas();
+    void agregarArma(unique_ptr<Arma>);
+    const vector<unique_ptr<Arma>>& obtenerArmas();
 };
 
 class Guerrero : public Personaje {
@@ -47,7 +47,7 @@ protected:
     int fuerza;
     int vida;
     int velocidad;
-    vector<shared_ptr<Arma>> armas;
+    vector<unique_ptr<Arma>> armas;
 public:
     Guerrero(string nombre, int nivel, int fuerza, int vida, int velocidad);
 
@@ -58,8 +58,8 @@ public:
     string obtenerNombre();
     int obtenervida();
     int obtenernivel();
-    void agregarArma(shared_ptr<Arma>);
-    const vector<shared_ptr<Arma>>& obtenerArmas();
+    void agregarArma(unique_ptr<Arma>);
+    const vector<unique_ptr<Arma>>& obtenerArmas();
 };
 
 

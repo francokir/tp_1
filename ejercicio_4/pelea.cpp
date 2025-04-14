@@ -31,20 +31,36 @@ OpcionAtaque obtenerOpcionJugador2() {
     return static_cast<OpcionAtaque>(rand() % 3 + 1);
 }
 
-int calcularDano(OpcionAtaque ataqueJugador, OpcionAtaque ataqueEnemigo, shared_ptr<Arma> armaJugador) {
-    int dano = 0;
+int calcularDano(OpcionAtaque ataqueJugador, OpcionAtaque ataqueEnemigo, Arma* armaJugador) {
+    bool ganaJugador = false;
+    bool ganaEnemigo = false;
+
     if ((ataqueJugador == GOLPE_FUERTE && ataqueEnemigo == GOLPE_RAPIDO) ||
         (ataqueJugador == GOLPE_RAPIDO && ataqueEnemigo == DEFENSA_Y_GOLPE) ||
         (ataqueJugador == DEFENSA_Y_GOLPE && ataqueEnemigo == GOLPE_FUERTE)) {
+        ganaJugador = true;
+    }
+    else if ((ataqueEnemigo == GOLPE_FUERTE && ataqueJugador == GOLPE_RAPIDO) ||
+             (ataqueEnemigo == GOLPE_RAPIDO && ataqueJugador == DEFENSA_Y_GOLPE) ||
+             (ataqueEnemigo == DEFENSA_Y_GOLPE && ataqueJugador == GOLPE_FUERTE)) {
+        ganaEnemigo = true;
+    }
+
+    int dano = 0;
+    if (ganaJugador) {
+        dano = 10;
+        if (armaJugador) {
+            dano += armaJugador->obtenerdano();
+        }
+    } 
+    else if (ganaEnemigo) {
         dano = 10;
     }
-    if (armaJugador) {
-        dano += armaJugador->obtenerdano();
-    }
+    
     return dano;
 }
 
-shared_ptr<Personaje> elegirPersonajeJugador1() {
+unique_ptr<Personaje> elegirPersonajeJugador1() {
     int clase;
     cout << "Elige tu clase de personaje:" << endl;
     cout << "1. Guerrero" << endl;
@@ -74,7 +90,7 @@ shared_ptr<Personaje> elegirPersonajeJugador1() {
     }
 }
 
-shared_ptr<Arma> elegirArmaJugador1() {
+unique_ptr<Arma> elegirArmaJugador1() {
     cout << "Elige tu arma:" << endl;
     cout << "1. Espada medieval" << endl;
     cout << "2. Hacha letal" << endl;
@@ -114,10 +130,9 @@ void pelea() {
     srand(static_cast<unsigned int>(time(0)));
 
     auto jugador1 = elegirPersonajeJugador1();
-    auto armaJugador1 = elegirArmaJugador1();
-    jugador1->agregarArma(armaJugador1);
+    jugador1->agregarArma(move(elegirArmaJugador1()));
 
-    shared_ptr<Personaje> jugador2;
+    unique_ptr<Personaje> jugador2;
     if (rand() % 2 == 0) jugador2 = PersonajeFactory::crearGuerrero();
     else jugador2 = PersonajeFactory::crearMago();
 
@@ -126,9 +141,14 @@ void pelea() {
         jugador2->agregarArma(PersonajeFactory::crearArmaAleatoria());
     }
 
-    shared_ptr<Arma> armaJugador2 = nullptr;
+    Arma* armaJugador1 = nullptr;
+    if (!jugador1->obtenerArmas().empty()) {
+        armaJugador1 = jugador1->obtenerArmas().front().get();
+        }
+
+    Arma* armaJugador2 = nullptr;
     if (!jugador2->obtenerArmas().empty()) {
-    armaJugador2 = jugador2->obtenerArmas().front();
+    armaJugador2 = jugador2->obtenerArmas().front().get();
     }
 
     int hp1 = jugador1->obtenervida();
