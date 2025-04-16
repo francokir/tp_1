@@ -106,15 +106,15 @@ unique_ptr<Guerrero> PersonajeFactory::crearGuerrero() {
 
 unique_ptr<Guerrero> PersonajeFactory::crearGuerrero(const string& subtipo) {
     if (subtipo == "Barbaro")
-        return make_unique<Barbaro>("Barbaro", 1, 100, 70, 40);
+        return make_unique<Barbaro>("Barbaro", 1, 80, 100, 40);
     else if (subtipo == "Paladin")
-        return make_unique<Paladin>("Paladin", 1, 100, 70, 10);
+        return make_unique<Paladin>("Paladin", 1, 50, 100, 10);
     else if (subtipo == "Caballero")
-        return make_unique<Caballero>("Caballero", 1, 100, 70, 20);
+        return make_unique<Caballero>("Caballero", 1, 70, 100, 20);
     else if (subtipo == "Mercenario")
-        return make_unique<Mercenario>("Mercenario", 1, 100, 70, 30);
+        return make_unique<Mercenario>("Mercenario", 1, 75, 100, 30);
     else if (subtipo == "Gladiador")
-        return make_unique<Gladiador>("Gladiador", 1, 100, 70, 30);
+        return make_unique<Gladiador>("Gladiador", 1, 85, 100, 30);
     else
         throw invalid_argument("Subtipo de guerrero desconocido: " + subtipo);
 }

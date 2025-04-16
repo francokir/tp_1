@@ -31,32 +31,31 @@ OpcionAtaque obtenerOpcionJugador2() {
     return static_cast<OpcionAtaque>(rand() % 3 + 1);
 }
 
-int calcularDano(OpcionAtaque ataqueJugador, OpcionAtaque ataqueEnemigo, Arma* armaJugador) {
-    bool ganaJugador = false;
-    bool ganaEnemigo = false;
+enum ResultadoCombate {
+    EMPATE,
+    GANA_JUGADOR,
+    GANA_ENEMIGO
+};
 
-    if ((ataqueJugador == GOLPE_FUERTE && ataqueEnemigo == GOLPE_RAPIDO) ||
-        (ataqueJugador == GOLPE_RAPIDO && ataqueEnemigo == DEFENSA_Y_GOLPE) ||
-        (ataqueJugador == DEFENSA_Y_GOLPE && ataqueEnemigo == GOLPE_FUERTE)) {
-        ganaJugador = true;
+ResultadoCombate resolverCombate(OpcionAtaque jugador, OpcionAtaque enemigo) {
+    if ((jugador == GOLPE_FUERTE && enemigo == GOLPE_RAPIDO) ||
+        (jugador == GOLPE_RAPIDO && enemigo == DEFENSA_Y_GOLPE) ||
+        (jugador == DEFENSA_Y_GOLPE && enemigo == GOLPE_FUERTE)) {
+        return GANA_JUGADOR;
     }
-    else if ((ataqueEnemigo == GOLPE_FUERTE && ataqueJugador == GOLPE_RAPIDO) ||
-             (ataqueEnemigo == GOLPE_RAPIDO && ataqueJugador == DEFENSA_Y_GOLPE) ||
-             (ataqueEnemigo == DEFENSA_Y_GOLPE && ataqueJugador == GOLPE_FUERTE)) {
-        ganaEnemigo = true;
+    if ((enemigo == GOLPE_FUERTE && jugador == GOLPE_RAPIDO) ||
+        (enemigo == GOLPE_RAPIDO && jugador == DEFENSA_Y_GOLPE) ||
+        (enemigo == DEFENSA_Y_GOLPE && jugador == GOLPE_FUERTE)) {
+        return GANA_ENEMIGO;
     }
+    return EMPATE;
+}
 
-    int dano = 0;
-    if (ganaJugador) {
-        dano = 10;
-        if (armaJugador) {
-            dano += armaJugador->obtenerdano();
-        }
-    } 
-    else if (ganaEnemigo) {
-        dano = 10;
+int calcularDano(Arma* arma) {
+    int dano = 10;
+    if (arma) {
+        dano += arma->obtenerdano();
     }
-    
     return dano;
 }
 
@@ -136,7 +135,7 @@ void pelea() {
     if (rand() % 2 == 0) jugador2 = PersonajeFactory::crearGuerrero();
     else jugador2 = PersonajeFactory::crearMago();
 
-    int cantidadArmas = PersonajeFactory::numeroAleatorio(0, 2);
+    int cantidadArmas = PersonajeFactory::numeroAleatorio(1, 2);
     for (int i = 0; i < cantidadArmas; ++i) {
         jugador2->agregarArma(PersonajeFactory::crearArmaAleatoria());
     }
@@ -160,21 +159,51 @@ void pelea() {
         OpcionAtaque opcionJugador1 = obtenerOpcionJugador1();
         OpcionAtaque opcionJugador2 = obtenerOpcionJugador2();
 
-        int dano1 = calcularDano(opcionJugador1, opcionJugador2, armaJugador1);
-        int dano2 = calcularDano(opcionJugador2, opcionJugador1, armaJugador2);
+        ResultadoCombate resultado = resolverCombate(opcionJugador1, opcionJugador2);
 
-        hp1 -= dano2;
-        hp2 -= dano1;
-
+        if (resultado == GANA_JUGADOR) {
+            int dano = calcularDano(armaJugador1);
+            hp2 -= dano;
+            if (hp2 < 0) hp2 = 0;
+        } else if (resultado == GANA_ENEMIGO) {
+            int dano = calcularDano(armaJugador2);
+            hp1 -= dano;
+            if (hp1 < 0) hp1 = 0;
+        }
         cout << "\n== RESULTADOS DEL TURNO ==" << endl;
-        cout << "Jugador 1 (" << jugador1->obtenerNombre() << ") ataca con " << armaJugador1->obtenerNombre()
-             << " y hace " << dano1 << " puntos de daño." << endl;
+        
+        if (resultado == GANA_JUGADOR) {
+            cout << "El ganador de la ronda es el Jugador 1" << endl;
+        } else if (resultado == GANA_ENEMIGO) {
+            cout << "El ganador de la ronda es el Jugador 2" << endl;
+        } else if (resultado == EMPATE){
+            cout << "Hay un empate esta ronda y nadie hara daño" << endl;
+        }
 
-        if (armaJugador2)
-            cout << "Jugador 2 (" << jugador2->obtenerNombre() << ") ataca con " << armaJugador2->obtenerNombre()
-                 << " y hace " << dano2 << " puntos de daño." << endl;
-        else
-            cout << "Jugador 2 (" << jugador2->obtenerNombre() << ") ataca sin arma y hace " << dano2 << " puntos de daño." << endl;
+
+        if (resultado == GANA_JUGADOR) {
+            int dano = calcularDano(armaJugador1);
+            cout << "Jugador 1 (" << jugador1->obtenerNombre() << ") elige " << opcionJugador1
+                 << " y ataca con " << armaJugador1->obtenerNombre()
+                 << " haciendo " << dano << " puntos de daño." << endl;
+        
+            cout << "Jugador 2 (" << jugador2->obtenerNombre() << ") elige " << opcionJugador2
+                 << " y no hace daño esta ronda." << endl;
+        
+        } else if (resultado == GANA_ENEMIGO) {
+            int dano = calcularDano(armaJugador2);
+            cout << "Jugador 2 (" << jugador2->obtenerNombre() << ") elige " << opcionJugador2
+                 << " y ataca con " << armaJugador2->obtenerNombre()
+                 << " haciendo " << dano << " puntos de daño." << endl;
+        
+            cout << "Jugador 1 (" << jugador1->obtenerNombre() << ") elige " << opcionJugador1
+                 << " y no hace daño esta ronda." << endl;
+        
+        } else { 
+            cout << "Jugador 1 (" << jugador1->obtenerNombre() << ") elige " << opcionJugador1 << endl;
+            cout << "Jugador 2 (" << jugador2->obtenerNombre() << ") elige " << opcionJugador2 << endl;
+            cout << "Empate. Nadie hace daño esta ronda (0 puntos de daño)." << endl;
+        }
 
         cout << "HP actual: Jugador 1 = " << hp1 << ", Jugador 2 = " << hp2 << "\n" << endl;
 

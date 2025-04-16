@@ -15,11 +15,11 @@ class Arma {
 
 class ItemMagico : public Arma {
     protected:
+        string nombre;
         int puntos_magia;
         int multiplicador_por_rareza;
         string elemento;
         string efecto;
-        string nombre;
     public: 
         ItemMagico(string nombre, int puntos_magia, int tipo_rareza, string elemento, string efecto);
         string obtenerNombre() const override;
@@ -31,11 +31,11 @@ class ItemMagico : public Arma {
 
 class ArmaCombate : public Arma {
     protected:
+        string nombre;
         int dano;
         float peso;
         string material;
         int durabilidad;
-        string nombre;
     public:
         ArmaCombate(string nombre, int dano, float peso, string material, int durabilidad);
         string obtenerNombre() const override;

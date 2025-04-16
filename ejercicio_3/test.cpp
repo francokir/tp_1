@@ -9,7 +9,7 @@ int main() {
     PersonajeFactory factory;
     factory.inicializarRandom();
 
-    vector<shared_ptr<Personaje>> personajes = factory.crearPersonajesArmados();
+    vector<unique_ptr<Personaje>> personajes = factory.crearPersonajesArmados();
 
     cout << "Se han creado " << personajes.size() << " personajes:\n\n";
 
@@ -18,7 +18,7 @@ int main() {
              << " Nivel: " << personaje->obtenernivel()
              << ", Vida: " << personaje->obtenervida() << ")\n";
 
-        const vector<shared_ptr<Arma>>& armas = personaje->obtenerArmas();
+        const vector<unique_ptr<Arma>>& armas = personaje->obtenerArmas();
         if (armas.empty()) {
             cout << " No tiene armas\n";
         } else {
